@@ -16,6 +16,9 @@ import edu.uci.ics.crawler4j.url.WebURL;
 public class IcsCrawler extends WebCrawler{
 	private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg|pdf" + "|png|mp3|mp3|zip|gz))$");
 	private int longestPageLength = Integer.MIN_VALUE;
+	
+	private final String crawlerStorageLocation = "/Users/peternguyen/Documents/school/cs121/";
+	
 	 /**
      * This method receives two parameters. The first parameter is the page
      * in which we have discovered this new url and the second parameter is
@@ -46,7 +49,7 @@ public class IcsCrawler extends WebCrawler{
          
          if(!subdomain.equals("www.ics")){
         	 try{
-            	 FileWriter fw = new FileWriter("/Users/peternguyen/Documents/school/cs121/crawlerStorage/subdomains.txt", true);
+            	 FileWriter fw = new FileWriter(crawlerStorageLocation +  "subdomains.txt", true);
             	 BufferedWriter out = new BufferedWriter(fw);
             	 out.append(url);
             	 out.newLine();
@@ -66,7 +69,7 @@ public class IcsCrawler extends WebCrawler{
              Set<WebURL> links = htmlParseData.getOutgoingUrls();
              
              try{
-            	 FileWriter webpageFileWriter = new FileWriter("/Users/peternguyen/Documents/school/cs121/crawlerStorage/webpages/" + id + ".html");
+            	 FileWriter webpageFileWriter = new FileWriter(crawlerStorageLocation +  "/webpages/" + id + ".html");
             	 BufferedWriter out = new BufferedWriter(webpageFileWriter);
             	 out.append(html);
             	 out.newLine();
@@ -79,14 +82,14 @@ public class IcsCrawler extends WebCrawler{
              int pageWordCount = countWords(text);
              
              try{
-            	 FileWriter fw = new FileWriter("/Users/peternguyen/Documents/school/cs121/crawlerStorage/pages.txt", true);
+            	 FileWriter fw = new FileWriter(crawlerStorageLocation + "pages.txt", true);
             	 BufferedWriter out = new BufferedWriter(fw);
             	 out.append(id + " " + pageWordCount + " " + url);
             	 out.newLine();
             	 out.close();
             	 
             	 
-            	 FileWriter wordsWriter = new FileWriter("/Users/peternguyen/Documents/school/cs121/crawlerStorage/words.txt", true);
+            	 FileWriter wordsWriter = new FileWriter(crawlerStorageLocation + "words.txt", true);
             	 BufferedWriter wordsOut = new BufferedWriter(wordsWriter);
             	 wordsOut.append(text);
             	 wordsOut.close();
