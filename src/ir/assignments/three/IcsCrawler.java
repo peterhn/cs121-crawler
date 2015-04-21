@@ -34,10 +34,10 @@ public class IcsCrawler extends WebCrawler {
 		 * A list of bad domains that the crawler should skip.
 		 */
 		final String[] urlTraps = {
-				"http://archive.ics.uci.edu/",
-                "http://calendar.ics.uci.edu/",
-                "http://ngs.ics.uci.edu/",
-                "http://evoke.ics.uci.edu/",
+				"archive.ics.uci.edu",
+                "calendar.ics.uci.edu",
+                "ngs.ics.uci.edu",
+                "evoke.ics.uci.edu",
 		};
 
 		/*
