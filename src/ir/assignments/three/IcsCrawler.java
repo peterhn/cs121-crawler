@@ -17,7 +17,7 @@ public class IcsCrawler extends WebCrawler {
 			.compile(".*(\\.(css|js|gif|jpg|pdf" + "|png|mp3|mp3|zip|gz))$");
 	private int longestPageLength = Integer.MIN_VALUE;
 	
-	private HashSet<String> subdomains = new HashSet<>();
+	private static HashSet<String> subdomains = new HashSet<>();
 
 	/**
 	 * This method receives two parameters. The first parameter is the page in
