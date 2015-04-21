@@ -8,24 +8,24 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
 public class Controller {
 
+	public static final String STORAGE_FOLDER = "crawlerContents";
+	public static final String USER_AGENT = "UCI Inf141-CS121 crawler 68419390 53042590";
+	public static final String SEED = "http://www.ics.uci.edu/";
+	public static final int NUMBER_CRAWLERS = 7;
+	
 	public static void main(String[] args) throws Exception{
-		// TODO Auto-generated method stub
-		String crawlStorageFolder = "/Users/peternguyen/Documents/school/cs121/crawlerStorage/";
-		String userAgent = "UCI Inf141-CS121 crawler 68419390";
-        int numberOfCrawlers = 7;
-
-        CrawlConfig config = new CrawlConfig();
-        config.setCrawlStorageFolder(crawlStorageFolder);
-        config.setUserAgentString(userAgent);
+        final CrawlConfig config = new CrawlConfig();
+        config.setCrawlStorageFolder(STORAGE_FOLDER);
+        config.setUserAgentString(USER_AGENT);
         config.setPolitenessDelay(300);
         config.setResumableCrawling(true);
         /*
          * Instantiate the controller for this crawl.
          */
-        PageFetcher pageFetcher = new PageFetcher(config);
-        RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
-        RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
-        CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
+        final PageFetcher pageFetcher = new PageFetcher(config);
+        final RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
+        final RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
+        final CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
 
         /*
          * For each crawl, you need to add some seed urls. These are the first
@@ -34,13 +34,13 @@ public class Controller {
          */
         //controller.addSeed("http://www.ics.uci.edu/~lopes/");
         //controller.addSeed("http://www.ics.uci.edu/~welling/");
-        controller.addSeed("http://www.ics.uci.edu/");
+        controller.addSeed(SEED);
 
         /*
          * Start the crawl. This is a blocking operation, meaning that your code
          * will reach the line after this only when crawling is finished.
          */
-        controller.start(IcsCrawler.class, numberOfCrawlers);
+        controller.start(IcsCrawler.class, NUMBER_CRAWLERS);
 
 	}
 
