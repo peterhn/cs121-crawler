@@ -34,9 +34,10 @@ public class IcsCrawler extends WebCrawler {
 		 * A list of bad domains that the crawler should skip.
 		 */
 		final String[] urlTraps = {
-				"https://archive.ics.uci.edu/",
-                "https://calendar.ics.uci.edu/",
-                "https://ngs.ics.uci.edu/",
+				"http://archive.ics.uci.edu/",
+                "http://calendar.ics.uci.edu/",
+                "http://ngs.ics.uci.edu/",
+                "http://evoke.ics.uci.edu/",
 		};
 
 		/*
@@ -81,13 +82,31 @@ public class IcsCrawler extends WebCrawler {
 			HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
 			String text = htmlParseData.getText();
 			String html = htmlParseData.getHtml();
-			Set<WebURL> links = htmlParseData.getOutgoingUrls();
+//			Set<WebURL> links = htmlParseData.getOutgoingUrls();
 
+			/*
+			 * Store pages HTML
+			 */
 			try {
 				FileWriter webpageFileWriter = new FileWriter(
 						Controller.WEBPAGES_FOLDER + id + ".html");
 				BufferedWriter out = new BufferedWriter(webpageFileWriter);
 				out.append(html);
+				out.newLine();
+				out.close();
+
+			} catch (Exception ex) {
+				System.out.println(ex.getMessage());
+			}
+
+			/*
+			 * Store pages as plain text 
+			 */
+			try {
+				FileWriter webpageFileWriter = new FileWriter(
+						Controller.WEBPAGES_FOLDER + id + ".txt");
+				BufferedWriter out = new BufferedWriter(webpageFileWriter);
+				out.append(text);
 				out.newLine();
 				out.close();
 
@@ -115,14 +134,17 @@ public class IcsCrawler extends WebCrawler {
 				System.out.println(ex.getMessage());
 			}
 
-			System.out.println("Text length: " + text.length());
-			System.out.println("Html length: " + html.length());
-			System.out.println("Number of outgoing links: " + links.size());
+			/*
+			 * Comment these out to speed up the crawler just slightly
+			 */
+//			System.out.println("Text length: " + text.length());
+//			System.out.println("Html length: " + html.length());
+//			System.out.println("Number of outgoing links: " + links.size());
 		}
 	}
 
 	private int countWords(final String text) {
-		return text.split("\\s").length;
+		return text.split("\\s+").length;
 	}
 
 }
