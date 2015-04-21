@@ -30,6 +30,22 @@ public class IcsCrawler extends WebCrawler {
 	public boolean shouldVisit(final Page referringPage, final WebURL url) {
 		final String href = url.getURL().toLowerCase();
 
+		/*
+		 * A list of bad domains that the crawler should skip.
+		 */
+		final String[] urlTraps = {
+				"https://archive.ics.uci.edu/",
+                "https://calendar.ics.uci.edu/",
+		};
+
+		/*
+		 * Explicitly return false for any TRAP URLs
+		 */
+		for (final String trapUrl : urlTraps) {
+			if (href.indexOf(trapUrl) > -1) {
+				return false;
+			}
+		}
 		return !FILTERS.matcher(href).matches()
 				&& href.indexOf(".ics.uci.edu") > -1; // href.startsWith("http://www.ics.uci.edu/");
 	}
@@ -68,7 +84,7 @@ public class IcsCrawler extends WebCrawler {
 
 			try {
 				FileWriter webpageFileWriter = new FileWriter(
-						Controller.STORAGE_FOLDER + "/webpages/" + id + ".html");
+						Controller.WEBPAGES_FOLDER + id + ".html");
 				BufferedWriter out = new BufferedWriter(webpageFileWriter);
 				out.append(html);
 				out.newLine();
