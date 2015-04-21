@@ -2,6 +2,7 @@ package ir.assignments.three;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -15,6 +16,8 @@ public class IcsCrawler extends WebCrawler {
 	private final static Pattern FILTERS = Pattern
 			.compile(".*(\\.(css|js|gif|jpg|pdf" + "|png|mp3|mp3|zip|gz))$");
 	private int longestPageLength = Integer.MIN_VALUE;
+	
+	private HashSet<String> subdomains = new HashSet<>();
 
 	/**
 	 * This method receives two parameters. The first parameter is the page in
@@ -59,7 +62,7 @@ public class IcsCrawler extends WebCrawler {
 	@Override
 	public void visit(final Page page) {
 		final String subdomain = page.getWebURL().getSubDomain();
-		if (!subdomain.equals("www.ics")) {
+		if (!subdomain.equals("www.ics") && subdomains.add(subdomain)) {
 			try {
 				FileWriter fw = new FileWriter(Controller.STORAGE_FOLDER
 						+ "subdomains.txt", true);
