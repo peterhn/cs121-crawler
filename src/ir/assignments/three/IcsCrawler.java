@@ -36,6 +36,7 @@ public class IcsCrawler extends WebCrawler {
 		final String[] urlTraps = {
 				"https://archive.ics.uci.edu/",
                 "https://calendar.ics.uci.edu/",
+                "https://ngs.ics.uci.edu/",
 		};
 
 		/*

@@ -1,6 +1,7 @@
 package ir.assignments.three;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 public class Crawler {
 	/**
@@ -12,7 +13,9 @@ public class Crawler {
 	 * collection containing all URLs visited during the crawl.
 	 */
 	public static Collection<String> crawl(String seedURL) {
-		// TODO implement me
-		return null;
+		final HashSet<String> allURLs = new HashSet<>();
+		allURLs.add(seedURL);
+		System.out.println("Crawl seedURL: " + seedURL);
+		return allURLs;
 	}
 }
