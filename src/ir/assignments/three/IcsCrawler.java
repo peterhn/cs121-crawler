@@ -58,16 +58,13 @@ public class IcsCrawler extends WebCrawler {
 	 */
 	@Override
 	public void visit(final Page page) {
-		String url = page.getWebURL().getURL();
-		String subdomain = page.getWebURL().getSubDomain();
-		String id = UUID.randomUUID().toString();
-
+		final String subdomain = page.getWebURL().getSubDomain();
 		if (!subdomain.equals("www.ics")) {
 			try {
 				FileWriter fw = new FileWriter(Controller.STORAGE_FOLDER
 						+ "subdomains.txt", true);
 				BufferedWriter out = new BufferedWriter(fw);
-				out.append(url);
+				out.append(subdomain);
 				out.newLine();
 				out.close();
 			} catch (Exception ex) {
@@ -75,13 +72,15 @@ public class IcsCrawler extends WebCrawler {
 			}
 		}
 
-		System.out.println("Subdomain: " + subdomain);
+//		System.out.println("Subdomain: " + subdomain);
+		final String url = page.getWebURL().getURL();
 		System.out.println("URL: " + url);
 
 		if (page.getParseData() instanceof HtmlParseData) {
-			HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
-			String text = htmlParseData.getText();
-			String html = htmlParseData.getHtml();
+			final String id = UUID.randomUUID().toString();
+			final HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
+			final String text = htmlParseData.getText();
+			final String html = htmlParseData.getHtml();
 //			Set<WebURL> links = htmlParseData.getOutgoingUrls();
 
 			/*
