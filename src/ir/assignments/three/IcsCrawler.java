@@ -126,11 +126,15 @@ public class IcsCrawler extends WebCrawler {
 				out.newLine();
 				out.close();
 
-				FileWriter wordsWriter = new FileWriter(
-						Controller.STORAGE_FOLDER + "words.txt", true);
-				BufferedWriter wordsOut = new BufferedWriter(wordsWriter);
-				wordsOut.append(text);
-				wordsOut.close();
+				/*
+				 * This creates a gigantic text file which is slow to open when it exceeds a large amount of lines.
+				 * Split it into individual text files instead.
+				 */
+//				FileWriter wordsWriter = new FileWriter(
+//						Controller.STORAGE_FOLDER + "words.txt", true);
+//				BufferedWriter wordsOut = new BufferedWriter(wordsWriter);
+//				wordsOut.append(text);
+//				wordsOut.close();
 
 			} catch (Exception ex) {
 				System.out.println(ex.getMessage());
