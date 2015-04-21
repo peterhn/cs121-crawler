@@ -18,6 +18,12 @@ public class IcsCrawler extends WebCrawler {
 	private int longestPageLength = Integer.MIN_VALUE;
 	
 	private HashSet<String> subdomains = new HashSet<>();
+	/*
+	 * Lock the files before write.
+	 * This may slow down the crawler since it essentially is making a small part
+	 * of it, single threaded.
+	 */
+	private static final Object lock = new Object();
 
 	/**
 	 * This method receives two parameters. The first parameter is the page in
@@ -62,7 +68,7 @@ public class IcsCrawler extends WebCrawler {
 	@Override
 	public void visit(final Page page) {
 		final String subdomain = page.getWebURL().getSubDomain();
-		if (!subdomain.equals("www.ics") && subdomains.add(subdomain)) {
+		if (!subdomain.equals("www.ics") && addToSubdomains(subdomain)) {
 			try {
 				FileWriter fw = new FileWriter(Controller.STORAGE_FOLDER
 						+ "subdomains.txt", true);
@@ -146,6 +152,12 @@ public class IcsCrawler extends WebCrawler {
 //			System.out.println("Text length: " + text.length());
 //			System.out.println("Html length: " + html.length());
 //			System.out.println("Number of outgoing links: " + links.size());
+		}
+	}
+
+	private boolean addToSubdomains(final String subdomain) {
+		synchronized (lock) {
+			return subdomains.add(subdomain);
 		}
 	}
 
