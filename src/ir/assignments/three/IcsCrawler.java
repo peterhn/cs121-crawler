@@ -1,6 +1,7 @@
 package ir.assignments.three;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,9 +15,9 @@ import edu.uci.ics.crawler4j.url.WebURL;
 
 public class IcsCrawler extends WebCrawler {
 	private final static Pattern FILTERS = Pattern
-			.compile(".*(\\.(css|js|gif|jpg|pdf" + "|png|mp3|mp3|zip|gz))$");
+			.compile(".*(\\.(css|js|gif|jpg|pdf|png|mp3|mp3|zip|gz))$");
 	private int longestPageLength = Integer.MIN_VALUE;
-	
+
 	private static HashSet<String> subdomains = new HashSet<>();
 
 	/**
@@ -36,12 +37,8 @@ public class IcsCrawler extends WebCrawler {
 		/*
 		 * A list of bad domains that the crawler should skip.
 		 */
-		final String[] urlTraps = {
-				"archive.ics.uci.edu",
-                "calendar.ics.uci.edu",
-                "ngs.ics.uci.edu",
-                "evoke.ics.uci.edu",
-		};
+		final String[] urlTraps = { "archive.ics.uci.edu",
+				"calendar.ics.uci.edu", "ngs.ics.uci.edu", "evoke.ics.uci.edu", };
 
 		/*
 		 * Explicitly return false for any TRAP URLs
@@ -75,23 +72,31 @@ public class IcsCrawler extends WebCrawler {
 			}
 		}
 
-//		System.out.println("Subdomain: " + subdomain);
+		// System.out.println("Subdomain: " + subdomain);
 		final String url = page.getWebURL().getURL();
 		System.out.println("URL: " + url);
 
 		if (page.getParseData() instanceof HtmlParseData) {
 			final String id = UUID.randomUUID().toString();
-			final HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
+			final HtmlParseData htmlParseData = (HtmlParseData) page
+					.getParseData();
 			final String text = htmlParseData.getText();
 			final String html = htmlParseData.getHtml();
-//			Set<WebURL> links = htmlParseData.getOutgoingUrls();
+			// Set<WebURL> links = htmlParseData.getOutgoingUrls();
+
+			final String subdomainFolderName = Controller.WEBPAGES_FOLDER
+					+ subdomain + "/";
+			final File subdomainFolder = new File(subdomainFolderName);
+			if (!subdomainFolder.exists()) {
+				subdomainFolder.mkdirs();
+			}
 
 			/*
 			 * Store pages HTML
 			 */
 			try {
 				FileWriter webpageFileWriter = new FileWriter(
-						Controller.WEBPAGES_FOLDER + id + ".html");
+						subdomainFolderName + id + ".html");
 				BufferedWriter out = new BufferedWriter(webpageFileWriter);
 				out.append(html);
 				out.newLine();
@@ -102,11 +107,11 @@ public class IcsCrawler extends WebCrawler {
 			}
 
 			/*
-			 * Store pages as plain text 
+			 * Store pages as plain text
 			 */
 			try {
-				FileWriter webpageFileWriter = new FileWriter(
-						Controller.WEBPAGES_FOLDER + id + ".txt");
+				FileWriter webpageFileWriter = new FileWriter(subdomainFolderName + id
+						+ ".txt");
 				BufferedWriter out = new BufferedWriter(webpageFileWriter);
 				out.append(text);
 				out.newLine();
@@ -127,14 +132,15 @@ public class IcsCrawler extends WebCrawler {
 				out.close();
 
 				/*
-				 * This creates a gigantic text file which is slow to open when it exceeds a large amount of lines.
-				 * Split it into individual text files instead.
+				 * This creates a gigantic text file which is slow to open when
+				 * it exceeds a large amount of lines. Split it into individual
+				 * text files instead.
 				 */
-//				FileWriter wordsWriter = new FileWriter(
-//						Controller.STORAGE_FOLDER + "words.txt", true);
-//				BufferedWriter wordsOut = new BufferedWriter(wordsWriter);
-//				wordsOut.append(text);
-//				wordsOut.close();
+				// FileWriter wordsWriter = new FileWriter(
+				// Controller.STORAGE_FOLDER + "words.txt", true);
+				// BufferedWriter wordsOut = new BufferedWriter(wordsWriter);
+				// wordsOut.append(text);
+				// wordsOut.close();
 
 			} catch (Exception ex) {
 				System.out.println(ex.getMessage());
@@ -143,9 +149,9 @@ public class IcsCrawler extends WebCrawler {
 			/*
 			 * Comment these out to speed up the crawler just slightly
 			 */
-//			System.out.println("Text length: " + text.length());
-//			System.out.println("Html length: " + html.length());
-//			System.out.println("Number of outgoing links: " + links.size());
+			// System.out.println("Text length: " + text.length());
+			// System.out.println("Html length: " + html.length());
+			// System.out.println("Number of outgoing links: " + links.size());
 		}
 	}
 

@@ -14,7 +14,7 @@ public class Controller {
 	public static final String WEBPAGES_FOLDER = STORAGE_FOLDER + "/webpages/";
 	public static final String USER_AGENT = "UCI Inf141-CS121 crawler 68419390 53042590";
 	public static final String SEED = "http://www.ics.uci.edu/";
-	public static final int NUMBER_CRAWLERS = 7;
+	public static final int NUMBER_CRAWLERS = 20;
 
 	public static void main(String[] args) throws Exception {
 		final CrawlConfig config = new CrawlConfig();
@@ -35,10 +35,8 @@ public class Controller {
 		 */
 		final PageFetcher pageFetcher = new PageFetcher(config);
 		final RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
-		final RobotstxtServer robotstxtServer = new RobotstxtServer(
-				robotstxtConfig, pageFetcher);
-		final CrawlController controller = new CrawlController(config,
-				pageFetcher, robotstxtServer);
+		final RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
+		final CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
 
 		/*
 		 * For each crawl, you need to add some seed urls. These are the first
@@ -54,7 +52,5 @@ public class Controller {
 		 * will reach the line after this only when crawling is finished.
 		 */
 		controller.start(IcsCrawler.class, NUMBER_CRAWLERS);
-
 	}
-
 }
