@@ -19,6 +19,10 @@ public class IcsCrawler extends WebCrawler {
 	private int longestPageLength = Integer.MIN_VALUE;
 
 	private static HashSet<String> subdomains = new HashSet<>();
+	
+	public static HashSet<String> getSubdomainSet() {
+		return subdomains;
+	}
 
 	/**
 	 * This method receives two parameters. The first parameter is the page in
@@ -37,8 +41,12 @@ public class IcsCrawler extends WebCrawler {
 		/*
 		 * A list of bad domains that the crawler should skip.
 		 */
-		final String[] urlTraps = { "archive.ics.uci.edu",
-				"calendar.ics.uci.edu", "ngs.ics.uci.edu", "evoke.ics.uci.edu", };
+		final String[] urlTraps = { 
+				"archive.ics.uci.edu",
+				"calendar.ics.uci.edu", 
+				"ngs.ics.uci.edu", 
+				"evoke.ics.uci.edu", 
+				};
 
 		/*
 		 * Explicitly return false for any TRAP URLs
@@ -68,7 +76,7 @@ public class IcsCrawler extends WebCrawler {
 				out.newLine();
 				out.close();
 			} catch (Exception ex) {
-				System.out.println(ex.getMessage());
+				System.err.println(ex.getMessage());
 			}
 		}
 
@@ -103,7 +111,7 @@ public class IcsCrawler extends WebCrawler {
 				out.close();
 
 			} catch (Exception ex) {
-				System.out.println(ex.getMessage());
+				System.err.println(ex.getMessage());
 			}
 
 			/*
@@ -118,7 +126,7 @@ public class IcsCrawler extends WebCrawler {
 				out.close();
 
 			} catch (Exception ex) {
-				System.out.println(ex.getMessage());
+				System.err.println(ex.getMessage());
 			}
 
 			int pageWordCount = countWords(text);
@@ -143,7 +151,7 @@ public class IcsCrawler extends WebCrawler {
 				// wordsOut.close();
 
 			} catch (Exception ex) {
-				System.out.println(ex.getMessage());
+				System.err.println(ex.getMessage());
 			}
 
 			/*

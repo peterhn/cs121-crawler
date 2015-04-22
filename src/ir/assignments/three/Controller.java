@@ -1,6 +1,8 @@
 package ir.assignments.three;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
@@ -14,7 +16,7 @@ public class Controller {
 	public static final String WEBPAGES_FOLDER = STORAGE_FOLDER + "/webpages/";
 	public static final String USER_AGENT = "UCI Inf141-CS121 crawler 68419390 53042590";
 	public static final String SEED = "http://www.ics.uci.edu/";
-	public static final int NUMBER_CRAWLERS = 20;
+	public static final int NUMBER_CRAWLERS = 64;
 
 	public static void main(String[] args) throws Exception {
 		final CrawlConfig config = new CrawlConfig();
@@ -35,8 +37,10 @@ public class Controller {
 		 */
 		final PageFetcher pageFetcher = new PageFetcher(config);
 		final RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
-		final RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
-		final CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
+		final RobotstxtServer robotstxtServer = new RobotstxtServer(
+				robotstxtConfig, pageFetcher);
+		final CrawlController controller = new CrawlController(config,
+				pageFetcher, robotstxtServer);
 
 		/*
 		 * For each crawl, you need to add some seed urls. These are the first
@@ -46,11 +50,32 @@ public class Controller {
 		// controller.addSeed("http://www.ics.uci.edu/~lopes/");
 		// controller.addSeed("http://www.ics.uci.edu/~welling/");
 		controller.addSeed(SEED);
+		
+		
+		/*
+		 * Add all of the already existing subdomains from previous crawls
+		 */
+		initFoundSubdomains();
 
 		/*
 		 * Start the crawl. This is a blocking operation, meaning that your code
 		 * will reach the line after this only when crawling is finished.
 		 */
 		controller.start(IcsCrawler.class, NUMBER_CRAWLERS);
+	}
+
+	private static void initFoundSubdomains() {
+		final File file = new File(Controller.STORAGE_FOLDER + "subdomains.txt");
+		if (file.exists()) {
+			try {
+				final Scanner scanner = new Scanner(file);
+				while (scanner.hasNextLine()) {
+					IcsCrawler.getSubdomainSet().add(scanner.nextLine());
+					}
+				scanner.close();
+			} catch (FileNotFoundException e) {
+				System.err.println(e.getMessage());
+			}
+		}
 	}
 }
