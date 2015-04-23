@@ -65,22 +65,42 @@ public class Crawler extends WebCrawler {
 			final HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
 			final String title = htmlParseData.getTitle();
 			final String text = htmlParseData.getText();
-			final String html = htmlParseData.getHtml();
 			final Set<WebURL> links = htmlParseData.getOutgoingUrls();
 
+			System.out.println("URL: " + url.getURL());
+			System.out.println("Text length: " + text.length());
+			System.out.println("Number of outgoing links: " + links.size());
+
 			writeLog(url, title, text);
-			displayLog(url, text, html, links);
+			writeWordCounts(url, text);
+			writeOutgoingLinks(url, links);
 		}
 	}
 
-	private synchronized void displayLog(final WebURL url, final String text, final String html, final Set<WebURL> links){
-		System.out.println("URL: " + url.getURL());
-		System.out.println("Text length: " + text.length());
-		System.out.println("Html length: " + html.length());
-		System.out.println("Number of outgoing links: " + links.size());
+	private int wordCount(final String pageText) {
+		return pageText.split("\\s+").length;
+	}
+
+	private void writeWordCounts(final WebURL url, final String text) {
+		try {
+			// Write out a single line which contains the word count and the URL
+			final FileWriter fWriter = new FileWriter(Controller.WORDCOUNT_FILE, true);
+			final int count = wordCount(text);
+			final StringBuilder builder = new StringBuilder(String.valueOf(count));
+			builder.append(" ");
+			builder.append(url.getURL());
+			builder.append("\n");
+			fWriter.write(builder.toString());
+			fWriter.close();
+		} catch (final IOException e) {
+			System.err.println("Error when writing " + url.getURL());
+		}
+	}
+
+	private void writeOutgoingLinks(final WebURL url, final Set<WebURL> links){
 		try {
 			// Write out a single line which contains all of the outgoing links found on the given URL
-			final FileWriter fWriter = new FileWriter(Controller.DATA_FILE, true);
+			final FileWriter fWriter = new FileWriter(Controller.LINKS_FILE, true);
 			final StringBuilder builder = new StringBuilder(url.getURL());
 			builder.append("\t");
 			for (final WebURL link : links) {
@@ -100,7 +120,8 @@ public class Crawler extends WebCrawler {
 			// Long way of basically mirroring the webserver
 
 			// The remaining that will be mirrored into the LOG_DIR
-			final String path = url.getSubDomain();
+			final int STRIP_HTTP = "http://".length();
+			final String path = url.getURL().substring(STRIP_HTTP);
 			final String logPath = Controller.LOG_DIR + path;
 			File file = new File(logPath);
 

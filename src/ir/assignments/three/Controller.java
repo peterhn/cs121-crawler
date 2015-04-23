@@ -13,7 +13,8 @@ public class Controller {
 	public static final String BASE_DIR = "./crawlerContents/";
 	public static final String STORAGE_FOLDER = BASE_DIR + "root/";
  	public static final String LOG_DIR = BASE_DIR + "log/";
- 	public static final String DATA_FILE = BASE_DIR + "crawlerLink.data";
+ 	public static final String LINKS_FILE = BASE_DIR + "outgoingLinks.data";
+ 	public static final String WORDCOUNT_FILE = BASE_DIR + "wordCount.data";
 	public static final String USER_AGENT = "UCI Inf141-CS121 crawler 68419390 53042590 25372224";
 	public static final String SEED = "http://www.ics.uci.edu/";
 	public static final int NUMBER_CRAWLERS = 12;
