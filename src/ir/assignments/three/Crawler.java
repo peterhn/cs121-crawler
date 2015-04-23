@@ -54,7 +54,7 @@ public class Crawler extends WebCrawler {
 	 */
 	@Override
 	public void visit(final Page page) {
-		WebURL url = page.getWebURL();
+		final WebURL url = page.getWebURL();
 
 		if (page.getParseData() instanceof HtmlParseData) {
 			final HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
@@ -93,15 +93,12 @@ public class Crawler extends WebCrawler {
 		try {
 			// Long way of basically mirroring the webserver
 
-			// Strip the HTTP off the url
-			final int STRIP_HTTP = "http://".length();
-
 			// The remaining that will be mirrored into the LOG_DIR
-			final String path = url.getURL().substring(STRIP_HTTP);
+			final String path = url.getSubDomain();
 			final String logPath = Controller.LOG_DIR + path;
 			File file = new File(logPath);
 
-			// Store the contents in a domain-named folder with file name index.txt
+			// If the retrieved URL is a directory, store it as index.txt
 			if (file.isDirectory()) {
 				file = new File(logPath + "index.txt");
 			// If the file discovered is a directory by path but not function, then
