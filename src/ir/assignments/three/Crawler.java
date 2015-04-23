@@ -3,6 +3,7 @@ package ir.assignments.three;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -12,6 +13,10 @@ import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
 
 public class Crawler extends WebCrawler {
+
+	public static Collection<String> crawl(final String seedURL) {
+		return null;
+	}
 
 	// Do not find any of these patterns, ignore them all
 	private final static Pattern FILTERS = Pattern
