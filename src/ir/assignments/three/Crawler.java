@@ -74,6 +74,7 @@ public class Crawler extends WebCrawler {
 		System.out.println("Html length: " + html.length());
 		System.out.println("Number of outgoing links: " + links.size());
 		try {
+			// Write out a single line which contains all of the outgoing links found on the given URL
 			final FileWriter fWriter = new FileWriter(Controller.DATA_FILE, true);
 			final StringBuilder builder = new StringBuilder(url.getURL());
 			builder.append("\t");
