@@ -1,8 +1,6 @@
 package ir.assignments.three;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
 
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
@@ -12,23 +10,27 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
 public class Controller {
 
-	public static final String STORAGE_FOLDER = "./crawlerContents/";
-	public static final String WEBPAGES_FOLDER = STORAGE_FOLDER + "/webpages/";
-	public static final String USER_AGENT = "UCI Inf141-CS121 crawler 68419390 53042590";
+	public static final String BASE_DIR = "./crawlerContents/";
+	public static final String STORAGE_FOLDER = BASE_DIR + "root/";
+ 	public static final String LOG_DIR = BASE_DIR + "log/";
+ 	public static final String DATA_FILE = BASE_DIR + "crawlerLink.data";
+	public static final String USER_AGENT = "UCI Inf141-CS121 crawler 68419390 53042590 25372224";
 	public static final String SEED = "http://www.ics.uci.edu/";
-	public static final int NUMBER_CRAWLERS = 64;
+	public static final int NUMBER_CRAWLERS = 12;
 
-	public static void main(String[] args) throws Exception {
+	public static void main(final String[] args) throws Exception {
 		final CrawlConfig config = new CrawlConfig();
 		config.setCrawlStorageFolder(STORAGE_FOLDER);
 		config.setUserAgentString(USER_AGENT);
 		config.setPolitenessDelay(300);
 		config.setResumableCrawling(true);
+		config.setMaxDepthOfCrawling(8);
+		config.setMaxPagesToFetch(-1);
 
 		/*
 		 * Explicitly make sure that the storage directories exist
 		 */
-		final File webpagesFolder = new File(WEBPAGES_FOLDER);
+		final File webpagesFolder = new File(STORAGE_FOLDER);
 		if (!webpagesFolder.exists()) {
 			webpagesFolder.mkdirs();
 		}
@@ -37,6 +39,7 @@ public class Controller {
 		 */
 		final PageFetcher pageFetcher = new PageFetcher(config);
 		final RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
+		robotstxtConfig.setUserAgentName(USER_AGENT);
 		final RobotstxtServer robotstxtServer = new RobotstxtServer(
 				robotstxtConfig, pageFetcher);
 		final CrawlController controller = new CrawlController(config,
@@ -50,32 +53,16 @@ public class Controller {
 		// controller.addSeed("http://www.ics.uci.edu/~lopes/");
 		// controller.addSeed("http://www.ics.uci.edu/~welling/");
 		controller.addSeed(SEED);
-		
-		
-		/*
-		 * Add all of the already existing subdomains from previous crawls
-		 */
-		initFoundSubdomains();
 
 		/*
 		 * Start the crawl. This is a blocking operation, meaning that your code
 		 * will reach the line after this only when crawling is finished.
 		 */
-		controller.start(IcsCrawler.class, NUMBER_CRAWLERS);
-	}
+		controller.start(Crawler.class, NUMBER_CRAWLERS);
 
-	private static void initFoundSubdomains() {
-		final File file = new File(Controller.STORAGE_FOLDER + "subdomains.txt");
-		if (file.exists()) {
-			try {
-				final Scanner scanner = new Scanner(file);
-				while (scanner.hasNextLine()) {
-					IcsCrawler.getSubdomainSet().add(scanner.nextLine());
-					}
-				scanner.close();
-			} catch (FileNotFoundException e) {
-				System.err.println(e.getMessage());
-			}
-		}
+		/*
+		 * For now
+		 */
+		System.out.println("Crawler has finished");
 	}
 }
