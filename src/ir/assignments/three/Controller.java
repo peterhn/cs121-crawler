@@ -15,7 +15,7 @@ public class Controller {
  	public static final String LOG_DIR = BASE_DIR + "log/";
  	public static final String LINKS_FILE = BASE_DIR + "outgoingLinks.data";
  	public static final String WORDCOUNT_FILE = BASE_DIR + "wordCount.data";
-	public static final String USER_AGENT = "UCI Inf141-CS121 crawler 68419390 53042590 25372224";
+	public static final String USER_AGENT = "UCI Inf141-CS121 crawler 53042590 68419390 25372224";
 	public static final String SEED = "http://www.ics.uci.edu/";
 	public static final int NUMBER_CRAWLERS = 12;
 
@@ -23,7 +23,7 @@ public class Controller {
 		final CrawlConfig config = new CrawlConfig();
 		config.setCrawlStorageFolder(STORAGE_FOLDER);
 		config.setUserAgentString(USER_AGENT);
-		config.setPolitenessDelay(300);
+		config.setPolitenessDelay(400);
 		config.setResumableCrawling(true);
 		config.setMaxDepthOfCrawling(8);
 		config.setMaxPagesToFetch(-1);
@@ -31,9 +31,14 @@ public class Controller {
 		/*
 		 * Explicitly make sure that the storage directories exist
 		 */
-		final File webpagesFolder = new File(STORAGE_FOLDER);
-		if (!webpagesFolder.exists()) {
-			webpagesFolder.mkdirs();
+		final File rootFolder = new File(STORAGE_FOLDER);
+		if (!rootFolder.exists()) {
+			rootFolder.mkdirs();
+		}
+
+		final File logFolder = new File(LOG_DIR);
+		if (!logFolder.exists()) {
+			logFolder.mkdirs();
 		}
 		/*
 		 * Instantiate the controller for this crawl.

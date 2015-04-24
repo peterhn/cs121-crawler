@@ -2,7 +2,6 @@ package ir.assignments.three;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -19,20 +18,26 @@ public class Crawler extends WebCrawler {
 	}
 
 	// Do not find any of these patterns, ignore them all
-	private final static Pattern FILTERS = Pattern
-			.compile(".*(\\.(css|js|bmp|gif|jpe?g"
-					+ "|png|tiff?|mid|mp2|mp3|mp4"
-					+ "|wav|avi|mov|mpeg|ram|m4v|pdf"
-					+ "|rm|smil|wmv|swf|wma|zip|rar|gz))$");
+	public final static Pattern FILTERS = Pattern
+			.compile(".*(\\.(css|js|bmp|gif|jpe?g|png|tiff?|mid|mp2|mp3|mp4"
+					+ "|wav|avi|mov|mpeg|ram|m4v|pdf|rm|smil|wmv|swf"
+					+ "|webm|tar|wma|zip|rar|gz|xz|bz|lz|7z|dmg))$");
 
 	// URLs must conform to this domain
-	private final static Pattern SUFFIX = Pattern.compile("^http://.*\\.ics\\.uci\\.edu/.*");
+	// In this regex the DOT '.' character GLOBS to an ANY character
+	// Start with 'http://' contains ics uci and edu
+	public final static Pattern SUFFIX = Pattern.compile("^http://.*\\.ics\\.uci\\.edu/.*");
 
 	// TRAP URLs which will be difficult to crawl or impossible to crawl
-	private final static Pattern TRAPS = Pattern.compile("^http://(ftp|archive|calendar)\\.ics\\.uci\\.edu/.*");
+	// Start with 'http://' contains ics uci and edu
+	// Subdomain is either ftp | archive, etc
+	public final static Pattern TRAPS = Pattern.compile("^http://(ftp|archive|calendar)\\.ics\\.uci\\.edu/.*");
 
 	// Skip URLs which have queries or other kinds of JS, they are not different RAW pages
-	private final static Pattern QUERYFILTERS = Pattern.compile(".*[\\?@=].*");
+	// Web queries commonly use the ?, @, and = characters to denote a part of a query,
+	// because the query does not change the page, it is worthless to
+	// crawl all of the different types of web queries.
+	public final static Pattern QUERYFILTERS = Pattern.compile(".*[\\?@=].*");
 
 	/**
 	 * This method receives two parameters. The first parameter is the page in
@@ -47,6 +52,9 @@ public class Crawler extends WebCrawler {
 	@Override
 	public boolean shouldVisit(final Page referringPage, final WebURL url) {
 		final String href = url.getURL().toLowerCase();
+		// Make sure that the file is not any of the file types we do not want,
+		// comes from the ics.uci.edu domain, is not a query of any kind,
+		// and does not come from any of the TRAP URL domains specified above.
 		return !FILTERS.matcher(href).matches()
 				&& SUFFIX.matcher(href).matches()
 				&& !QUERYFILTERS.matcher(href).matches()
@@ -68,8 +76,6 @@ public class Crawler extends WebCrawler {
 			final Set<WebURL> links = htmlParseData.getOutgoingUrls();
 
 			System.out.println("URL: " + url.getURL());
-			System.out.println("Text length: " + text.length());
-			System.out.println("Number of outgoing links: " + links.size());
 
 			writeLog(url, title, text);
 			writeWordCounts(url, text);
@@ -84,15 +90,16 @@ public class Crawler extends WebCrawler {
 	private void writeWordCounts(final WebURL url, final String text) {
 		try {
 			// Write out a single line which contains the word count and the URL
-			final FileWriter fWriter = new FileWriter(Controller.WORDCOUNT_FILE, true);
-			final int count = wordCount(text);
-			final StringBuilder builder = new StringBuilder(String.valueOf(count));
-			builder.append(" ");
+			final StringBuilder builder = new StringBuilder(String.valueOf(wordCount(text)));
+			builder.append("   ");
 			builder.append(url.getURL());
 			builder.append("\n");
+
+			// Write the file
+			final FileWriter fWriter = new FileWriter(Controller.WORDCOUNT_FILE, true);
 			fWriter.write(builder.toString());
 			fWriter.close();
-		} catch (final IOException e) {
+		} catch (final Exception e) {
 			System.err.println("Error when writing " + url.getURL());
 		}
 	}
@@ -100,17 +107,19 @@ public class Crawler extends WebCrawler {
 	private void writeOutgoingLinks(final WebURL url, final Set<WebURL> links){
 		try {
 			// Write out a single line which contains all of the outgoing links found on the given URL
-			final FileWriter fWriter = new FileWriter(Controller.LINKS_FILE, true);
 			final StringBuilder builder = new StringBuilder(url.getURL());
-			builder.append("\t");
+			builder.append("   ");
 			for (final WebURL link : links) {
 				builder.append(link.getURL());
 				builder.append(" ");
 			}
 			builder.append("\n");
+
+			// Write the file
+			final FileWriter fWriter = new FileWriter(Controller.LINKS_FILE, true);
 			fWriter.write(builder.toString());
 			fWriter.close();
-		} catch (final IOException e) {
+		} catch (final Exception e) {
 			System.err.println("Error when writing " + url.getURL());
 		}
 	}
@@ -123,14 +132,15 @@ public class Crawler extends WebCrawler {
 			final int STRIP_HTTP = "http://".length();
 			final String path = url.getURL().substring(STRIP_HTTP);
 			final String logPath = Controller.LOG_DIR + path;
-			File file = new File(logPath);
 
+			File file = new File(logPath);
+			final String urlPath = url.getPath();
 			// If the retrieved URL is a directory, store it as index.txt
 			if (file.isDirectory()) {
 				file = new File(logPath + "index.txt");
-			// If the file discovered is a directory by path but not function, then
-			// we must manually create an index.txt file in it
-			} else if (url.getPath().lastIndexOf('.') < url.getPath().lastIndexOf('/')) {
+			} else if (urlPath.endsWith("/")) {
+				// This is a top level domain index file.
+				// Append the / to show that it is a folder
 				file = new File(logPath + "/index.txt");
 			}
 			// Make sure that parent directories exist before attempting to write data
@@ -151,9 +161,8 @@ public class Crawler extends WebCrawler {
 				fWriter.write(text);
 			}
 			fWriter.close();
-
 		} catch (final Exception e) {
-			System.err.println("Error when writing " + url );
+			System.err.println("Error when writing " + url.getURL());
 		}
 	}
 
