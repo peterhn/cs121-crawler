@@ -10,7 +10,7 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
 public class Controller {
 
-	public static final String BASE_DIR = "./crawlerContents/";
+	public static final String BASE_DIR = "/scratch/pyamanak/crawlerContents/";
 	public static final String STORAGE_FOLDER = BASE_DIR + "root/";
  	public static final String LOG_DIR = BASE_DIR + "log/";
  	public static final String LINKS_FILE = BASE_DIR + "outgoingLinks.data";

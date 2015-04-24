@@ -31,13 +31,7 @@ public class Crawler extends WebCrawler {
 	// TRAP URLs which will be difficult to crawl or impossible to crawl
 	// Start with 'http://' contains ics uci and edu
 	// Subdomain is either ftp | archive, etc
-	public final static Pattern TRAPS = Pattern.compile("^http://(ftp|archive|calendar)\\.ics\\.uci\\.edu/.*");
-
-	// Skip URLs which have queries or other kinds of JS, they are not different RAW pages
-	// Web queries commonly use the ?, @, and = characters to denote a part of a query,
-	// because the query does not change the page, it is worthless to
-	// crawl all of the different types of web queries.
-	public final static Pattern QUERYFILTERS = Pattern.compile(".*[\\?@=].*");
+	public final static Pattern TRAPS = Pattern.compile("^http://(archive|calendar)\\.ics\\.uci\\.edu/.*");
 
 	/**
 	 * This method receives two parameters. The first parameter is the page in
@@ -56,9 +50,8 @@ public class Crawler extends WebCrawler {
 		// comes from the ics.uci.edu domain, is not a query of any kind,
 		// and does not come from any of the TRAP URL domains specified above.
 		return !FILTERS.matcher(href).matches()
-				&& SUFFIX.matcher(href).matches()
-				&& !QUERYFILTERS.matcher(href).matches()
-				&& !TRAPS.matcher(href).matches();
+				// && !TRAPS.matcher(href).matches()
+				&& SUFFIX.matcher(href).matches();
 	}
 
 	/**
