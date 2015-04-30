@@ -1,0 +1,7 @@
+After running the java function
+
+solveQuestion5 in the QuestionFive class, the output was a single
+large answer.txt file which contained a sorted list of all words
+and their frequency of occurance. The top 500 words were then retrieved by using simple Unix command-line tools.
+
+    head -n 500 answer.txt > CommonWords.txt
