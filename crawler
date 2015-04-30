@@ -7,19 +7,21 @@ cd $HOME/WebCrawler
 
 # Compile stuff
 echo "COMPILE java files"
-javac -sourcepath $HOME/WebCrawler/src -classpath $HOME/WebCrawler/lib/crawler4j-4.1-jar-with-dependencies.jar:$HOME/WebCrawler/lib/slf4j-jdk14-1.7.12.jar $HOME/WebCrawler/src/ir/assignments/three/Controller.java
-javac -sourcepath $HOME/WebCrawler/src -classpath $HOME/WebCrawler/lib/crawler4j-4.1-jar-with-dependencies.jar:$HOME/WebCrawler/lib/slf4j-jdk14-1.7.12.jar $HOME/WebCrawler/src/ir/assignments/three/Crawler.java
-javac -sourcepath $HOME/WebCrawler/src -classpath $HOME/WebCrawler/lib/crawler4j-4.1-jar-with-dependencies.jar:$HOME/WebCrawler/lib/slf4j-jdk14-1.7.12.jar $HOME/WebCrawler/src/ir/assignments/three/Frequency.java
-javac -sourcepath $HOME/WebCrawler/src -classpath $HOME/WebCrawler/lib/crawler4j-4.1-jar-with-dependencies.jar:$HOME/WebCrawler/lib/slf4j-jdk14-1.7.12.jar $HOME/WebCrawler/src/ir/assignments/three/Utilities.java
+javac -sourcepath $HOME/WebCrawler/src -classpath $HOME/WebCrawler/lib/crawler4j-4.1-jar-with-dependencies.jar:$HOME/WebCrawler/lib/slf4j-jdk14-1.7.12.jar $HOME/WebCrawler/src/ir/assignments/three/*.java
+# javac -sourcepath $HOME/WebCrawler/src -classpath $HOME/WebCrawler/lib/crawler4j-4.1-jar-with-dependencies.jar:$HOME/WebCrawler/lib/slf4j-jdk14-1.7.12.jar $HOME/WebCrawler/src/ir/assignments/three/Controller.java
+# javac -sourcepath $HOME/WebCrawler/src -classpath $HOME/WebCrawler/lib/crawler4j-4.1-jar-with-dependencies.jar:$HOME/WebCrawler/lib/slf4j-jdk14-1.7.12.jar $HOME/WebCrawler/src/ir/assignments/three/Crawler.java
+# javac -sourcepath $HOME/WebCrawler/src -classpath $HOME/WebCrawler/lib/crawler4j-4.1-jar-with-dependencies.jar:$HOME/WebCrawler/lib/slf4j-jdk14-1.7.12.jar $HOME/WebCrawler/src/ir/assignments/three/Frequency.java
+# javac -sourcepath $HOME/WebCrawler/src -classpath $HOME/WebCrawler/lib/crawler4j-4.1-jar-with-dependencies.jar:$HOME/WebCrawler/lib/slf4j-jdk14-1.7.12.jar $HOME/WebCrawler/src/ir/assignments/three/Utilities.java
 
 
 # Move class files
 echo "MOVE class files"
-mv $HOME/WebCrawler/src/ir/assignments/three/Controller.class $HOME/WebCrawler/bin/ir/assignments/three/Controller.class
-mv $HOME/WebCrawler/src/ir/assignments/three/Crawler.class $HOME/WebCrawler/bin/ir/assignments/three/Crawler.class
-mv $HOME/WebCrawler/src/ir/assignments/three/Frequency.class $HOME/WebCrawler/bin/ir/assignments/three/Frequency.class
-mv $HOME/WebCrawler/src/ir/assignments/three/Utilities.class $HOME/WebCrawler/bin/ir/assignments/three/Utilities.class
+mv $HOME/WebCrawler/src/ir/assignments/three/*.class $HOME/WebCrawler/bin/ir/assignments/three/
+# mv $HOME/WebCrawler/src/ir/assignments/three/Controller.class $HOME/WebCrawler/bin/ir/assignments/three/Controller.class
+# mv $HOME/WebCrawler/src/ir/assignments/three/Crawler.class $HOME/WebCrawler/bin/ir/assignments/three/Crawler.class
+# mv $HOME/WebCrawler/src/ir/assignments/three/Frequency.class $HOME/WebCrawler/bin/ir/assignments/three/Frequency.class
+# mv $HOME/WebCrawler/src/ir/assignments/three/Utilities.class $HOME/WebCrawler/bin/ir/assignments/three/Utilities.class
 
 # Run crawler
 echo "RUN Crawler"
-java -classpath $HOME/WebCrawler/lib/crawler4j-4.1-jar-with-dependencies.jar:$HOME/WebCrawler/lib/slf4j-jdk14-1.7.12.jar:$HOME/WebCrawler/bin/ ir/assignments/three/Controller
+# java -classpath $HOME/WebCrawler/lib/crawler4j-4.1-jar-with-dependencies.jar:$HOME/WebCrawler/lib/slf4j-jdk14-1.7.12.jar:$HOME/WebCrawler/bin/ ir/assignments/three/Controller

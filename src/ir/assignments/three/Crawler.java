@@ -5,11 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Set;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 import edu.uci.ics.crawler4j.crawler.Page;
@@ -19,79 +15,10 @@ import edu.uci.ics.crawler4j.url.WebURL;
 
 public class Crawler extends WebCrawler {
 
-	private static ArrayList<Frequency> al = new ArrayList<>();
-	private static HashMap<String, Integer> map = new HashMap<>();
 
 	public static Collection<String> crawl(final String seedURL) {
-		try {
-			if (!Utilities.fillStopWords()) {
-				return null;
-			}
-			System.out.println(Controller.CRAWL_RESULTS_DIR);
-			final File crawlLogs = new File(Controller.CRAWL_RESULTS_DIR);
-			listFiles(crawlLogs);
-			sortList();
-			addMapToList();
-			sortList();
-			writeFile();
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
+		QuestionFive.solveQuestion5();
 		return null;
-	}
-
-	private static void writeFile() throws IOException {
-		final File f = new File("/scratch/pyamanak/crawlerContents/dist/answer.txt");
-		final FileWriter fwr = new FileWriter(f, true);
-		final StringBuilder sb = new StringBuilder();
-		for (final Frequency fr : al) {
-			sb.append(String.format("%i %s\n", fr.getFrequency(), fr.getText()));
-		}
-		fwr.write(sb.toString());
-		fwr.close();
-	}
-
-	private static void sortList() {
-		Collections.sort(al, new Comparator<Frequency>() {
-			@Override
-			public final int compare(final Frequency f1, final Frequency f2) {
-				int diff;
-				diff = f2.getFrequency() - f1.getFrequency();
-				if (diff == 0) {
-					diff = f1.getText().compareTo(f2.getText());
-				}
-				return diff;
-			}
-		});
-	}
-
-	private static void listFiles(final File file) {
-		if (file.exists()) {
-			if (file.isDirectory()) {
-				for (final File f : file.listFiles()) {
-					listFiles(f);
-				}
-			} else {
-				final ArrayList<String> tokens = Utilities.tokenizeFile(file);
-				for (final String token : tokens) {
-					if (!Utilities.isStopWord(token)) {
-						if (map.containsKey(token)) {
-							map.put(token, map.get(token) + 1);
-						} else {
-							map.put(token, 1);
-						}
-					}
-				}
-			}
-		} else {
-			System.out.println("Cannot list file: " + file.getPath());
-		}
-	}
-
-	private static void addMapToList() {
-		for (final Map.Entry<String, Integer> entry : map.entrySet()) {
-			al.add(new Frequency(entry.getKey(), entry.getValue()));
-		}
 	}
 
 	// Do not find any of these patterns, ignore them all
