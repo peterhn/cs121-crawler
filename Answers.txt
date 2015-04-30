@@ -1,0 +1,19 @@
+1. How long did it take to crawl the domain?
+23 hours
+
+2. How many unique pages did you find (Uniqueness by URL not content)
+97531 unique pages
+
+3. How many subdomains did you find?
+Using src/ir/assignments/three/SubdomainsOutgoingLinks.java
+69 subdomains, in file Subdomains.txt
+
+4. What is the longest page in number of words?
+Using src/ir/assignments/three/LongestPage.java
+Page with most words is:
+    http://sli.ics.uci.edu/Classes/2013S-77B?action=download&upname=jester-train.csv with 7342100 words
+
+5. What are the 500 most common words?
+Using src/ir/assignments/three/QuestionFive.java
+
+Answers are contained in CommonWords.txt
