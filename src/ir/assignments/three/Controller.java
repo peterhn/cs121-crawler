@@ -1,12 +1,5 @@
 package ir.assignments.three;
 
-import java.io.File;
-
-import edu.uci.ics.crawler4j.crawler.CrawlConfig;
-import edu.uci.ics.crawler4j.crawler.CrawlController;
-import edu.uci.ics.crawler4j.fetcher.PageFetcher;
-import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
-import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
 public class Controller {
 
@@ -17,7 +10,7 @@ public class Controller {
  	public static final String WORDCOUNT_FILE = BASE_DIR + "wordCount.data";
 	public static final String USER_AGENT = "UCI Inf141-CS121 crawler 53042590 68419390 25372224";
 	public static final String SEED = "http://www.ics.uci.edu/";
-	public static final String CRAWL_ROOT = "./dist/";
+	public static final String CRAWL_ROOT = BASE_DIR + "dist/";
 	public static final String CRAWL_RESULTS_DIR = CRAWL_ROOT + "crawl/";
 	public static final int NUMBER_CRAWLERS = 12;
 

@@ -2,9 +2,9 @@ package ir.assignments.three;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -18,9 +18,28 @@ public class Crawler extends WebCrawler {
 	private static ArrayList<Frequency> al = new ArrayList<>();
 
 	public static Collection<String> crawl(final String seedURL) {
-		final File crawlLogs = new File(Controller.CRAWL_RESULTS_DIR);
-		listFiles(crawlLogs, "");
+		try {
+			if (!Utilities.fillStopWords()) {
+				return null;
+			}
+			final File crawlLogs = new File(Controller.CRAWL_RESULTS_DIR);
+			listFiles(crawlLogs, "");
+			writeFile();
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
 		return null;
+	}
+
+	private static void writeFile() throws IOException {
+		final File f = new File("./dist/answer.txt");
+		final FileWriter fwr = new FileWriter(f, true);
+		final StringBuilder sb = new StringBuilder();
+		for (final Frequency fr : al) {
+			sb.append(String.format("%i %s\n", fr.getFrequency(), fr.getText()));
+		}
+		fwr.write(sb.toString());
+		fwr.close();
 	}
 
 	private static void listFiles(final File file, final String tabs) {
@@ -30,7 +49,13 @@ public class Crawler extends WebCrawler {
 					listFiles(f, tabs + "\t");
 				}
 			} else {
-				System.out.println(tabs + file.getPath());
+				// System.out.println(tabs + file.getPath());
+				final ArrayList<String> tokens = Utilities.tokenizeFile(file);
+				for (final String token : tokens) {
+					if (!Utilities.isStopWord(token)) {
+						Utilities.addOrIncrementFrequency(token, al);
+					}
+				}
 			}
 		}
 	}

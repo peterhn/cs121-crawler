@@ -3,6 +3,7 @@ package ir.assignments.three;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 
@@ -10,6 +11,30 @@ import java.util.Scanner;
  * A collection of utility methods for text processing.
  */
 public class Utilities {
+	
+	private static final HashSet<String> stopWords = new HashSet<>();
+	private static final String STOP_WORDS = Controller.CRAWL_ROOT + "stopwords.txt";
+	
+	public static boolean fillStopWords() throws FileNotFoundException {
+		final File f = new File(STOP_WORDS);
+		if (f.exists()) {
+			final Scanner sc = new Scanner(f);
+			while (sc.hasNextLine()) {
+				final String s = sc.nextLine();
+				stopWords.add(s);
+			}
+			sc.close();
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public static boolean isStopWord(final String s) {
+		return stopWords.contains(s);
+	}
+	
+	
 	/**
 	 * Reads the input text file and splits it into alphanumeric tokens. Returns
 	 * an ArrayList of these tokens, ordered according to their occurrence in
