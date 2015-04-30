@@ -14,6 +14,7 @@ import edu.uci.ics.crawler4j.url.WebURL;
 public class Crawler extends WebCrawler {
 
 	public static Collection<String> crawl(final String seedURL) {
+		QuestionFive.solveQuestion5();
 		return null;
 	}
 

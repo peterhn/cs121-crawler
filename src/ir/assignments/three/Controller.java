@@ -70,5 +70,6 @@ public class Controller {
 		 * For now
 		 */
 		System.out.println("Crawler has finished");
+		Crawler.crawl(null);
 	}
 }
