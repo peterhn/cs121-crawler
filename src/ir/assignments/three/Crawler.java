@@ -2,7 +2,9 @@ package ir.assignments.three;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -13,8 +15,24 @@ import edu.uci.ics.crawler4j.url.WebURL;
 
 public class Crawler extends WebCrawler {
 
+	private static ArrayList<Frequency> al = new ArrayList<>();
+
 	public static Collection<String> crawl(final String seedURL) {
+		final File crawlLogs = new File(Controller.CRAWL_RESULTS_DIR);
+		listFiles(crawlLogs, "");
 		return null;
+	}
+
+	private static void listFiles(final File file, final String tabs) {
+		if (file.exists()) {
+			if (file.isDirectory()) {
+				for (final File f : file.listFiles()) {
+					listFiles(f, tabs + "\t");
+				}
+			} else {
+				System.out.println(tabs + file.getPath());
+			}
+		}
 	}
 
 	// Do not find any of these patterns, ignore them all
@@ -26,12 +44,14 @@ public class Crawler extends WebCrawler {
 	// URLs must conform to this domain
 	// In this regex the DOT '.' character GLOBS to an ANY character
 	// Start with 'http://' contains ics uci and edu
-	public final static Pattern SUFFIX = Pattern.compile("^http://.*\\.ics\\.uci\\.edu/.*");
+	public final static Pattern SUFFIX = Pattern
+			.compile("^http://.*\\.ics\\.uci\\.edu/.*");
 
 	// TRAP URLs which will be difficult to crawl or impossible to crawl
 	// Start with 'http://' contains ics uci and edu
 	// Subdomain is either ftp | archive, etc
-	public final static Pattern TRAPS = Pattern.compile("^http://(archive|calendar)\\.ics\\.uci\\.edu/.*");
+	public final static Pattern TRAPS = Pattern
+			.compile("^http://(archive|calendar)\\.ics\\.uci\\.edu/.*");
 
 	/**
 	 * This method receives two parameters. The first parameter is the page in
@@ -50,7 +70,7 @@ public class Crawler extends WebCrawler {
 		// comes from the ics.uci.edu domain, is not a query of any kind,
 		// and does not come from any of the TRAP URL domains specified above.
 		return !FILTERS.matcher(href).matches()
-				// && !TRAPS.matcher(href).matches()
+		// && !TRAPS.matcher(href).matches()
 				&& SUFFIX.matcher(href).matches();
 	}
 
@@ -63,7 +83,8 @@ public class Crawler extends WebCrawler {
 		final WebURL url = page.getWebURL();
 
 		if (page.getParseData() instanceof HtmlParseData) {
-			final HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
+			final HtmlParseData htmlParseData = (HtmlParseData) page
+					.getParseData();
 			final String title = htmlParseData.getTitle();
 			final String text = htmlParseData.getText();
 			final Set<WebURL> links = htmlParseData.getOutgoingUrls();
@@ -83,13 +104,15 @@ public class Crawler extends WebCrawler {
 	private void writeWordCounts(final WebURL url, final String text) {
 		try {
 			// Write out a single line which contains the word count and the URL
-			final StringBuilder builder = new StringBuilder(String.valueOf(wordCount(text)));
+			final StringBuilder builder = new StringBuilder(
+					String.valueOf(wordCount(text)));
 			builder.append("   ");
 			builder.append(url.getURL());
 			builder.append("\n");
 
 			// Write the file
-			final FileWriter fWriter = new FileWriter(Controller.WORDCOUNT_FILE, true);
+			final FileWriter fWriter = new FileWriter(
+					Controller.WORDCOUNT_FILE, true);
 			fWriter.write(builder.toString());
 			fWriter.close();
 		} catch (final Exception e) {
@@ -97,9 +120,10 @@ public class Crawler extends WebCrawler {
 		}
 	}
 
-	private void writeOutgoingLinks(final WebURL url, final Set<WebURL> links){
+	private void writeOutgoingLinks(final WebURL url, final Set<WebURL> links) {
 		try {
-			// Write out a single line which contains all of the outgoing links found on the given URL
+			// Write out a single line which contains all of the outgoing links
+			// found on the given URL
 			final StringBuilder builder = new StringBuilder(url.getURL());
 			builder.append("   ");
 			for (final WebURL link : links) {
@@ -109,7 +133,8 @@ public class Crawler extends WebCrawler {
 			builder.append("\n");
 
 			// Write the file
-			final FileWriter fWriter = new FileWriter(Controller.LINKS_FILE, true);
+			final FileWriter fWriter = new FileWriter(Controller.LINKS_FILE,
+					true);
 			fWriter.write(builder.toString());
 			fWriter.close();
 		} catch (final Exception e) {
@@ -117,7 +142,8 @@ public class Crawler extends WebCrawler {
 		}
 	}
 
-	private void writeLog(final WebURL url, final String title, final String text) {
+	private void writeLog(final WebURL url, final String title,
+			final String text) {
 		try {
 			// Long way of basically mirroring the webserver
 
@@ -136,11 +162,13 @@ public class Crawler extends WebCrawler {
 				// Append the / to show that it is a folder
 				file = new File(logPath + "/index.txt");
 			}
-			// Make sure that parent directories exist before attempting to write data
+			// Make sure that parent directories exist before attempting to
+			// write data
 			if (!file.exists()) {
-				// This will mirror the webserver by creating all parent directories
+				// This will mirror the webserver by creating all parent
+				// directories
 				final File parent = new File(file.getParent());
-				if (!parent.exists()){
+				if (!parent.exists()) {
 					parent.mkdirs();
 				}
 			}
